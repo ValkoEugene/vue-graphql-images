@@ -1,0 +1,26 @@
+{
+  "name": "vue-graphql-images",
+  "version": "1.0.0",
+  "description": "Vue-GraphQL-Apollo project",
+  "main": "server.js",
+  "scripts": {
+    "server": "nodemon server.js",
+    "client": "cd client && yarn serve",
+    "dev": "concurrently --names \"server,client\" \"yarn server --silent\" \"yarn client --silent\""
+  },
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.0.0-rc.7",
+    "bcrypt": "^3.0.0",
+    "dotenv": "^6.0.0",
+    "graphql": "15.3.0",
+    "jsonwebtoken": "^8.3.0",
+    "md5": "^2.2.1",
+    "mongoose": "^5.2.6"
+  },
+  "devDependencies": {
+    "concurrently": "^3.6.0",
+    "nodemon": "^1.18.1"
+  }
+}
