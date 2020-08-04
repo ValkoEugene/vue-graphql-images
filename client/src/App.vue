@@ -1,13 +1,13 @@
 <template>
   <v-app style="background: #e3e3ee">
-    <v-navigation-drawer v-model="sideNav" width="300" app temprory fixed>
-      <v-toolbar color="primary" dark flat>
+    <v-navigation-drawer v-model="sideNav" :width="300" app temprory fixed>
+      <v-list color="primary" dark flat>
         <v-app-bar-nav-icon @click="toggleSideNav" />
 
         <router-link to="/" tag="span" style="cursor: pointer;">
-          <h1>Vue GraphQL images</h1>
+          Vue GraphQL images
         </router-link>
-      </v-toolbar>
+      </v-list>
 
       <v-divider />
 

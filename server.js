@@ -28,7 +28,7 @@ mongoose
   })
   .then(() => console.log("db connected"))
   .then(() => server.listen())
-  .then(() => ({ url }) => {
+  .then(({ url }) => {
     console.log(`Server ready at ${url}`);
   })
   .catch((err) => console.error(err));

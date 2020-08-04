@@ -1,6 +1,17 @@
 <template>
   <v-container>
-    <CauroselByApolloQuery />
+    <ApolloQuery :query="getPostsQuery">
+      <template #default="{ result: { loading, data, error  } }">
+        <div>
+          {{ loading }}
+        </div>
+        <div v-if="loading || !data">loading...</div>
+
+        <div v-else-if="error">{{ error.message }}</div>
+
+        <caurosel v-else :posts="data.getPosts" />
+      </template>
+    </ApolloQuery>
   </v-container>
 </template>
 
@@ -8,9 +19,9 @@
 import { gql } from "apollo-boost";
 
 export default {
-  name: "Home",
+  name: "CauroselByApolloQuery",
   components: {
-    CauroselByApolloQuery: () => import("./CarouselByApolloQuery.vue"),
+    Caurosel: () => import("./Caurosel.vue"),
   },
   data: () => ({
     getPostsQuery: gql`
