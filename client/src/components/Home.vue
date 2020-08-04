@@ -5,25 +5,19 @@
 </template>
 
 <script>
-import { gql } from "apollo-boost";
-
 export default {
   name: "Home",
   components: {
     CauroselByApolloQuery: () => import("./CarouselByApolloQuery.vue"),
   },
-  data: () => ({
-    getPostsQuery: gql`
-      query getPosts {
-        getPosts {
-          _id
-          title
-          imageUrl
-          description
-        }
-      }
-    `,
-  }),
+  mounted() {
+    this.handleGetCarouselPosts();
+  },
+  methods: {
+    handleGetCarouselPosts() {
+      this.$store.dispatch("getPosts");
+    },
+  },
 };
 </script>
 
