@@ -15,7 +15,7 @@ const routes = [
     component: () => import("../components/posts/posts.vue"),
   },
   {
-    path: "/posts/add",
+    path: "/post/add",
     name: "PostsAdd",
     component: () => import("../components/posts/addPost.vue"),
   },

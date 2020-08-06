@@ -64,6 +64,6 @@ new Vue({
     // execute getCurrentUser query
     token
       ? this.$store.dispatch("getCurrentUser")
-      : this.$router.push("/signup");
+      : this.$router.push("/signin");
   },
 }).$mount("#app");

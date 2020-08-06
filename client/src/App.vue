@@ -13,7 +13,7 @@
 
       <v-list>
         <v-list-item
-          v-for="item in headerButtonItems"
+          v-for="item in sideNavItems"
           :key="item.link"
           :to="item.link"
         >
@@ -58,6 +58,25 @@
             <v-icon class="hidden-sm-only" left>{{ item.icon }}</v-icon>
             {{ item.title }}
           </v-btn>
+
+          <v-btn v-if="user" text to="/profile">
+            <v-icon class="hidden-sm-only">account_box</v-icon>
+            <v-badge>
+              <template #badge>
+                <span>
+                  1
+                </span>
+              </template>
+              Profile
+            </v-badge>
+          </v-btn>
+
+          <v-btn v-if="user" text @click="signout">
+            <v-icon class="hidden-sm-only">
+              exit_to_app
+            </v-icon>
+            Signout
+          </v-btn>
         </v-toolbar-items>
       </v-toolbar>
     </v-card>
@@ -73,19 +92,49 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "App",
   data: () => ({
     sideNav: false,
-    headerButtonItems: [
-      { icon: "chat", title: "Posts", link: "/posts" },
-      { icon: "lock_open", title: "Sign In", link: "/signin" },
-      { icon: "create", title: "Sign Up", link: "/signup" },
-    ],
   }),
+  computed: {
+    ...mapGetters(["user"]),
+    headerButtonItems() {
+      const items = [];
+
+      items.push({ icon: "chat", title: "Posts", link: "/posts" });
+
+      if (!this.user) {
+        items.push({ icon: "lock_open", title: "Sign In", link: "/signin" });
+        items.push({ icon: "create", title: "Sign Up", link: "/signup" });
+      }
+
+      return items;
+    },
+    sideNavItems() {
+      const items = [];
+
+      items.push({ icon: "chat", title: "Posts", link: "/posts" });
+
+      if (!this.user) {
+        items.push({ icon: "lock_open", title: "Sign In", link: "/signin" });
+        items.push({ icon: "create", title: "Sign Up", link: "/signup" });
+      } else {
+        items.push({ icon: "stars", title: "Create Post", link: "/post/add" });
+        items.push({ icon: "account_box", title: "Profile", link: "/profile" });
+      }
+
+      return items;
+    },
+  },
   methods: {
     toggleSideNav() {
       this.sideNav = !this.sideNav;
+    },
+    signout() {
+      this.$store.dispatch("signout");
     },
   },
 };

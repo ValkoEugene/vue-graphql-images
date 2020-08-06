@@ -67,6 +67,12 @@ export default new Vuex.Store({
         console.error(error);
       }
     },
+    signout: async ({ commit }) => {
+      commit("setUser", null);
+      localStorage.setItem("token", "");
+      await apolloClient.resetStore();
+      router.push("/signin");
+    },
   },
   getters: {
     posts: (state) => state.posts,
