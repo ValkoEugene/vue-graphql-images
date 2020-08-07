@@ -10,7 +10,8 @@ export default new Vuex.Store({
   state: {
     posts: [],
     user: null,
-    loading: true,
+    loading: false,
+    error: null,
   },
   mutations: {
     setUser: (state, payload) => {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
     },
     setLoading: (state, payload) => {
       state.loading = payload;
+    },
+    setError: (state, payload) => {
+      state.error = payload;
     },
   },
   actions: {
@@ -33,6 +37,7 @@ export default new Vuex.Store({
         console.log(data.getCurrentUser);
         commit("setUser", data.getCurrentUser);
       } catch (error) {
+        commit("setError", error);
         console.error(error);
       } finally {
         commit("setLoading", false);
@@ -46,13 +51,19 @@ export default new Vuex.Store({
         });
         commit("setPosts", data.getPosts);
       } catch (error) {
+        commit("setError", error);
         console.error(error);
       } finally {
         commit("setLoading", false);
       }
     },
-    signinUser: async ({ dispatch }, payload) => {
+    signinUser: async ({ dispatch, commit }, payload) => {
       try {
+        commit("setLoading", true);
+        commit("setError", null);
+        // Clear token for prevent errors
+        localStorage.setItem("token", "");
+
         const { data } = await apolloClient.mutate({
           mutation: SIGNIN_USER,
           variables: payload,
@@ -64,20 +75,28 @@ export default new Vuex.Store({
         console.log("router push /");
         router.push("/");
       } catch (error) {
+        commit("setError", error);
         console.error(error);
+      } finally {
+        commit("setLoading", false);
       }
     },
     signout: async ({ commit }) => {
-      commit("setUser", null);
-      localStorage.setItem("token", "");
-      await apolloClient.resetStore();
-      router.push("/signin");
+      try {
+        commit("setUser", null);
+        localStorage.setItem("token", "");
+        await apolloClient.resetStore();
+        router.push("/signin");
+      } catch (error) {
+        commit("setError", error);
+      }
     },
   },
   getters: {
     posts: (state) => state.posts,
     loading: (state) => state.loading,
     user: (state) => state.user,
+    error: (state) => state.error,
   },
   modules: {},
 });

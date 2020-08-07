@@ -6,6 +6,12 @@
       </v-col>
     </v-row>
 
+    <v-row v-if="error" wrap>
+      <v-col sx12 sm6 offset-sm3>
+        <form-alert :message="error.message" color="error" />
+      </v-col>
+    </v-row>
+
     <v-row wrap>
       <v-col xs12 sm6 offset-sm3>
         <v-card color="primary" dark>
@@ -15,18 +21,23 @@
                 v-model="username"
                 prepend-icon="face"
                 type="text"
-                :rules="[(v) => !!v || 'Field is required']"
+                :rules="usernameRules"
               />
               <v-text-field
                 v-model="password"
                 prepend-icon="extension"
                 type="password"
-                :rules="[(v) => !!v || 'Field is required']"
+                :rules="passwordRules"
               />
 
               <v-row>
                 <v-col xs12>
-                  <v-btn color="accent" type="button" @click="signinUser">
+                  <v-btn
+                    :loading="loading"
+                    color="accent"
+                    type="button"
+                    @click="signinUser"
+                  >
                     Signin
                   </v-btn>
                   <h3>
@@ -50,12 +61,23 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Signin",
+  components: {
+    FormAlert: () => import("../shared/FormAlert.vue"),
+  },
   data: () => ({
-    username: "",
-    password: "",
+    username: "john2",
+    password: "john",
+    usernameRules: [
+      (v) => !!v || "Field is required",
+      (v) => v.length >= 3 || "Min 3 char",
+    ],
+    passwordRules: [
+      (v) => !!v || "Field is required",
+      (v) => v.length >= 4 || "Min 4 char",
+    ],
   }),
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "error", "loading"]),
   },
   methods: {
     async signinUser() {

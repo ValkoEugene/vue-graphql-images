@@ -86,6 +86,20 @@
         <transition name="fade">
           <router-view />
         </transition>
+
+        <v-snackbar
+          v-model="authSnackbar"
+          :timeout="2000"
+          color="success"
+          bottom
+          left
+        >
+          <v-icon class="mr-3">check_circle</v-icon>
+          You are now signed in!
+          <v-btn dark text @click="authSnackbar = false">
+            Close
+          </v-btn>
+        </v-snackbar>
       </v-container>
     </v-main>
   </v-app>
@@ -98,7 +112,15 @@ export default {
   name: "App",
   data: () => ({
     sideNav: false,
+    authSnackbar: false,
   }),
+  watch: {
+    user(value, old) {
+      if (!old && value) {
+        this.authSnackbar = true;
+      }
+    },
+  },
   computed: {
     ...mapGetters(["user"]),
     headerButtonItems() {
