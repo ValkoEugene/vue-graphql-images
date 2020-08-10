@@ -1,7 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { defaultClient as apolloClient } from "../main";
-import { GET_POSTS, SIGNIN_USER, GET_CURRENT_USER } from "../queries";
+import {
+  GET_POSTS,
+  SIGNIN_USER,
+  SIGNUP_USER,
+  GET_CURRENT_USER,
+} from "../queries";
 import router from "../router";
 
 Vue.use(Vuex);
@@ -65,14 +70,34 @@ export default new Vuex.Store({
       try {
         commit("setLoading", true);
         commit("setError", null);
-        // Clear token for prevent errors
-        localStorage.setItem("token", "");
 
         const { data } = await apolloClient.mutate({
           mutation: SIGNIN_USER,
           variables: payload,
         });
         const { token } = data.signinUser;
+        localStorage.setItem("token", token);
+
+        await dispatch("getCurrentUser");
+        console.log("router push /");
+        router.push("/");
+      } catch (error) {
+        commit("setError", error);
+        console.error(error);
+      } finally {
+        commit("setLoading", false);
+      }
+    },
+    signupUser: async ({ dispatch, commit }, payload) => {
+      try {
+        commit("setLoading", true);
+        commit("setError", null);
+
+        const { data } = await apolloClient.mutate({
+          mutation: SIGNUP_USER,
+          variables: payload,
+        });
+        const { token } = data.signupUser;
         localStorage.setItem("token", token);
 
         await dispatch("getCurrentUser");
