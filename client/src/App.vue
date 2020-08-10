@@ -100,6 +100,21 @@
             Close
           </v-btn>
         </v-snackbar>
+
+        <v-snackbar
+          v-if="authError"
+          v-model="authErrorSnackbar"
+          :timeout="2000"
+          color="error"
+          bottom
+          left
+        >
+          <v-icon class="mr-3">cancel</v-icon>
+          {{ authError.message }}
+          <v-btn dark text to="/signin">
+            Signin
+          </v-btn>
+        </v-snackbar>
       </v-container>
     </v-main>
   </v-app>
@@ -113,6 +128,7 @@ export default {
   data: () => ({
     sideNav: false,
     authSnackbar: false,
+    authErrorSnackbar: false,
   }),
   watch: {
     user(value, old) {
@@ -120,9 +136,14 @@ export default {
         this.authSnackbar = true;
       }
     },
+    authError(value, old) {
+      if (!old && value) {
+        this.authErrorSnackbar = true;
+      }
+    },
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters(["user", "authError"]),
     headerButtonItems() {
       const items = [];
 

@@ -28,14 +28,19 @@ export const defaultClient = new ApolloClient({
       },
     });
   },
-  onError: ({ graphQlErrors, networkError }) => {
+  onError: (errors) => {
+    const { graphQLErrors, networkError } = errors;
     if (networkError) {
-      console.dir("networkError", networkError);
+      console.log("networkError", networkError);
     }
 
-    if (graphQlErrors) {
-      for (const err of graphQlErrors) {
-        console.dir("graphQlErrors", err);
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        console.log("graphQlErrors", err);
+        if (err.name === "AuthenticationError") {
+          store.commit("setAuthError", err);
+          store.dispatch("signout");
+        }
       }
     }
   },
