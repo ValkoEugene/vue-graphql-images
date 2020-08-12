@@ -79,13 +79,6 @@ export default {
   computed: {
     ...mapGetters(["user", "error", "loading"]),
   },
-  watch: {
-    user() {
-      if (this.user) {
-        this.$router.push("/");
-      }
-    },
-  },
   methods: {
     async signinUser() {
       if (!this.$refs.form.validate()) {

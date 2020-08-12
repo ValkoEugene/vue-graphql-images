@@ -11,6 +11,31 @@ export const GET_POSTS = gql`
   }
 `;
 
+export const ADD_POST = gql`
+  mutation addPost(
+    $title: String!
+    $description: String!
+    $imageUrl: String!
+    $categories: [String]!
+    $creatorId: ID!
+  ) {
+    addPost(
+      title: $title
+      description: $description
+      imageUrl: $imageUrl
+      categories: $categories
+      creatorId: $creatorId
+    ) {
+      _id
+      title
+      imageUrl
+      categories
+      description
+      createdDate
+    }
+  }
+`;
+
 export const SIGNIN_USER = gql`
   mutation signinUser($username: String!, $password: String!) {
     signinUser(username: $username, password: $password) {

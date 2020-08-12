@@ -1,7 +1,7 @@
-import store from "./store";
-
 export default (to, from, next) => {
-  if (!store.getters.user) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.log("-----authGuard redirect");
     next({
       path: "/signin",
     });
